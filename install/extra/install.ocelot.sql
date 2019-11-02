@@ -2716,6 +2716,8 @@ ALTER TABLE `api_keys` ADD FULLTEXT KEY `name_2` (`name`);
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
+-- --------------------------------------------------------
+
 --
 -- Table structure for table `users`
 --
