@@ -2367,7 +2367,7 @@ INSERT INTO `staffpanel` (`id`, `page_name`, `file_name`, `description`, `type`,
 (74, 'Sub Forum Config', 'staffpanel.php?tool=msubforums', 'Configure sub forums', 'settings', 6, 1, 1284303053),
 (75, 'Rules administration', 'staffpanel.php?tool=rules_admin', 'Configure site rules', 'settings', 4, 1, 1284303053),
 (76, 'Faq administration', 'staffpanel.php?tool=faq_admin', 'Configure site faq', 'settings', 4, 1, 1284303053),
-(114, ''api keys'', ''staffpanel.php?tool=api_keys'', ''api keys'', ''settings'', 6, 1, 1572681198);
+(114, 'api keys', 'staffpanel.php?tool=api_keys', 'api keys', 'settings', 6, 1, 1572681198);
 
 
 -- --------------------------------------------------------
