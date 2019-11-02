@@ -8,6 +8,12 @@
 
 ```
 
+##UPDATED 01-Nov-2019
+
+Password hashing switched over to bcrypt.
+OMDB/TMDB/YouTube mod has been incorperated. Page added to staff panel for adding API Keys easily.
+
+
 U-232 V5 -> High performance Bittorrent tracker
 
 ## Credits
@@ -98,7 +104,7 @@ Thank you for your efforts which make it possible for people all around the worl
 U-232 V5 requires the following :
 
 - Memcached
-- PHP7
+- PHP7.2
 - PHP7-CURL
 - PHP7-IGBINARY
 - PHP7-JSON
