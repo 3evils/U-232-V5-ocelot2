@@ -60,13 +60,13 @@ $newpage->create('tesu');
 if (get_row_count('users') >= $INSTALLER09['maxusers']) stderr($lang['stderr_errorhead'], sprintf($lang['stderr_ulimit'], $INSTALLER09['maxusers']));
 //==timezone select
 $offset = (string)$INSTALLER09['time_offset'];
-$time_select = "<div class='form-group'><div class='col-sm-9 col-sm-offset-1'><select class='form-control' name='user_timezone'>";
+$time_select = "<select name='user_timezone'>";
 foreach ($TZ as $off => $words) {
     if (preg_match("/^time_(-?[\d\.]+)$/", $off, $match)) {
         $time_select.= $match[1] == $offset ? "<option value='{$match[1]}' selected='selected'>$words</option>\n" : "<option value='{$match[1]}'>$words</option>\n";
     }
 }
-$time_select.= "</select></div></div>";
+$time_select.= "</select>";
 //==country by pdq
 function countries()
 {
@@ -81,11 +81,11 @@ function countries()
 $country = '';
 $countries = countries();
 foreach ($countries as $cntry) $country.= "<option value='" . (int)$cntry['id'] . "'" . ($CURUSER["country"] == $cntry['id'] ? " selected='selected'" : "") . ">" . htmlsafechars($cntry['name']) . "</option>\n";
-$gender.= "<div class='form-group'><div class='col-sm-4'><select class='form-control' name=\"gender\">
+$gender.= "<select name=\"gender\">
     <option value=\"Male\">{$lang['signup_male']}</option>
     <option value=\"Female\">{$lang['signup_female']}</option>
     <option value=\"NA\">{$lang['signup_na']}</option>
-    </select></div></div>";
+    </select>";
 // Normal Entry Point...
 //== click X by Retro
 $value = array(
@@ -104,32 +104,29 @@ $HTMLOUT.= "".($INSTALLER09['captcha_on'] ? "<script type='text/javascript'>
     });
     /*]]>*/
     </script>" : "")."
-<div style='width:75%; margin:auto auto; margin-top:-4%;'>
-    <form class='col-md-12 form-horizontal panel inverse' style='padding-top:2%;' role='form' method='post' title='signup' action='takesignup.php'>
-<div class='form-group'><div class='col-sm-9 col-sm-offset-1'><input  type='text' class='form-control' placeholder='{$lang['signup_uname']}' name='wantusername' id='wantusername' onblur='checkit();'></div></div>
-<div class='form-group'><div id='namecheck' class='col-sm-9 col-sm-offset-1'></div></div>
-<div class='form-group'><div class='col-sm-9 col-sm-offset-1'><input class='form-control' type='password' placeholder='{$lang['signup_pass']}' name='wantpassword'></div></div>
-<div class='form-group'><div class='col-sm-9 col-sm-offset-1'><input type='password' class='form-control' placeholder='{$lang['signup_passa']}' name='passagain'></div></div>
-<div class='form-group'><div class='col-sm-5 col-sm-offset-1'><input type='text' class='form-control' placeholder='Choose a 4 digit Pin Code' name='pin_code'></div><div class='col-sm-4'><input type='text' class='form-control' placeholder='Repeat Pin Code' name='pin_code2'></div></div>
-<div class='form-group'><div class='col-sm-9 col-sm-offset-1'><input type='text' class='form-control' placeholder='{$lang['signup_email']}' name='email'></div></div>
-
-<div class='form-group'><div class='col-sm-9 col-sm-offset-1'><span style='font-size:100%;'>{$lang['signup_valemail']}</span></div></div>
-
-
-<div class='form-group'><div class='col-sm-9 col-sm-offset-1'><label>{$lang['signup_timez']}</label></div></div>
-<div class='form-group'><div class='col-sm-12'>{$time_select}</div></div>";
+	<div class='row'><div class='large-3 columns'>&nbsp;&nbsp;</div>
+	<div class='large-6 columns'><div class='callout'>
+    <form style='padding-top:6%;' role='form' method='post' title='signup' action='takesignup.php'>
+<input  type='text' placeholder='{$lang['signup_uname']}' name='wantusername' id='wantusername' onblur='checkit();'>
+<div id='namecheck'></div>
+<input type='password' placeholder='{$lang['signup_pass']}' name='wantpassword'>
+<input type='password' placeholder='{$lang['signup_passa']}' name='passagain'>
+<input type='text' placeholder='Choose a 4 digit Pin Code' name='pin_code'><input type='text' placeholder='Repeat Pin Code' name='pin_code2'>
+<input type='text' placeholder='{$lang['signup_email']}' name='email' aria-describedby='valemailHelpText'>
+<p class='help-text' id='valemailHelpText'>{$lang['signup_valemail']}</p>
+<label>{$lang['signup_timez']} {$time_select}</label>";
 
 
 //==09 Birthday mod
-$year.= "<div class='col-sm-3'><select class='form-control' id='sel1' name=\"year\">";
+$year.= "<select id='sel1' name=\"year\">";
 $year.= "<option value=\"0000\">{$lang['signup_year']}</option>";
 $i = "2020";
 while ($i >= 1920) {
     $year.= "<option value=\"" . $i . "\">" . $i . "</option>";
     $i--;
 }
-$year.= "</select></div>";
-$month.= "<div class='col-sm-3'><select class='form-control' id='sel2' name=\"month\">
+$year.= "</select>";
+$month.= "<select id='sel2' name=\"month\">
     <option value=\"00\">{$lang['signup_month']}</option>
     <option value=\"01\">{$lang['signup_jan']}</option>
     <option value=\"02\">{$lang['signup_feb']}</option>
@@ -143,8 +140,8 @@ $month.= "<div class='col-sm-3'><select class='form-control' id='sel2' name=\"mo
     <option value=\"10\">{$lang['signup_oct']}</option>
     <option value=\"11\">{$lang['signup_nov']}</option>
     <option value=\"12\">{$lang['signup_dec']}</option>
-    </select></div>";
-$day.= "<div class='col-sm-3'><select class='form-control' id='sel3' name=\"day\">";
+    </select>";
+$day.= "<select id='sel3' name=\"day\">";
 $day.= "<option value=\"00\">{$lang['signup_day']}</option>";
 $i = 1;
 while ($i <= 31) {
@@ -155,8 +152,8 @@ while ($i <= 31) {
     }
     $i++;
 }
-$day.= "</select></div>";
-$HTMLOUT.= "<div class='form-group'><div class='col-sm-9 col-sm-offset-1'>{$lang['signup_birth']}<span style='color:red'>*</span></div></div><div class='row'><div class='form-group'><div class='col-sm-12 col-sm-offset-1'>" . $year . $month . $day . "</div></div></div>";
+$day.= "</select>";
+$HTMLOUT.= "<div class='input-group'>{$lang['signup_birth']}<span style='color:red'>*</span></div><div class='input-group'>" . $year . $month . $day . "</div>";
 //==End
 //==Passhint
 $passhint = "";
@@ -190,22 +187,22 @@ foreach ($questions as $sph) {
     $passhint.= "<option value='" . $sph['id'] . "'>" . $sph['question'] . "</option>\n";
 }
 $HTMLOUT.= "
-<div class='form-group'><div class='col-sm-9 col-sm-offset-1'>{$lang['signup_select']}</div></div>
-<div class='form-group'><div class='col-sm-9 col-sm-offset-1'><select class='form-control' name='passhint'>\n$passhint\n</select></div></div><div class='form-group'><div class='col-sm-9 col-sm-offset-1'><input type='text' class='form-control' placeholder='{$lang['signup_hint_here']}{$lang['signup_this_answer']}{$lang['signup_this_answer1']}' name='hintanswer'></div></div>
-<div class='form-group'>
-<div class='col-sm-5 col-sm-offset-1'>{$lang['signup_country']}<select class='form-control' name='country'>\n$country\n</select></div>
-&nbsp;&nbsp;&nbsp;&nbsp;{$lang['signup_gender']}$gender
-</div>
-<div class='form-group'><div class='col-sm-9 col-sm-offset-4'>
-<div class='checkbox'><label><input type='checkbox' name='rulesverify' value='yes'> {$lang['signup_rules']}</label></div>
-<div class='checkbox'><label><input type='checkbox' name='faqverify' value='yes'> {$lang['signup_faq']}</label></div>
-<div class='checkbox'><label><input type='checkbox' name='ageverify' value='yes'> {$lang['signup_age']}</label></div>
-</div></div>" . ($INSTALLER09['captcha_on'] ? "<div class='form-group'><div class='col-sm-9 col-sm-offset-1' id='captchasignup'></div></div>" : "") . "
-<div class='form-group'><div class='col-sm-9 col-sm-offset-1' style='text-align:center'>{$lang['signup_click']}&nbsp;<strong>{$lang['signup_x']}</strong>&nbsp;{$lang['signup_click1']}<br />
-    ";
+<label>{$lang['signup_select']}
+	<select name='passhint'>\n$passhint\n</select><input type='text' placeholder='{$lang['signup_hint_here']}{$lang['signup_this_answer']}{$lang['signup_this_answer1']}' name='hintanswer'></select>
+</label>
+<label>{$lang['signup_country']}<select name='country'>\n$country\n</select>
+{$lang['signup_gender']}$gender
+</label>
+<fieldset class='fieldset'>
+<label><input type='checkbox' name='rulesverify' value='yes'> {$lang['signup_rules']}</label>
+<label><input type='checkbox' name='faqverify' value='yes'> {$lang['signup_faq']}</label>
+<label><input type='checkbox' name='ageverify' value='yes'> {$lang['signup_age']}</label>
+</fieldset>" . ($INSTALLER09['captcha_on'] ? "<div class='input-group float-center'><div id='captchasignup'></div></div>" : "") . "
+<p class='text-center'>{$lang['signup_click']}&nbsp;<strong>{$lang['signup_x']}</strong>&nbsp;{$lang['signup_click1']}</p>
+	<div class='expanded button-group'>";
 for ($i = 0; $i < count($value); $i++) {
-    $HTMLOUT.= "<div style='display:inline-block;width:15px;'></div><span><input name=\"submitme\" type=\"submit\" value=\"" . $value[$i] . "\" class=\"btn\"></span>";
+    $HTMLOUT.= "<input name=\"submitme\" type=\"submit\" value=\"" . $value[$i] . "\" class=\"button\">";
 }
-$HTMLOUT.= "</div></div></form></div>";
+$HTMLOUT.= "</div></div></div><div class='large-3 columns'>&nbsp;&nbsp;</div></div></form>";
 echo stdhead($lang['head_signup']) . $HTMLOUT . stdfoot($stdfoot);
 ?>
