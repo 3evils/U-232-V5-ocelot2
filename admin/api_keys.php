@@ -39,7 +39,7 @@ $pconf = sql_query('SELECT * FROM api_keys') or sqlerr(__FILE__, __LINE__);
 while ($ac = mysqli_fetch_assoc($pconf)) $api_keys[$ac['name']] = $ac['value'];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $update = array();
-   
+
     foreach ($api_keys as $c_name => $c_value) if (isset($_POST[$c_name]) && $_POST[$c_name] != $c_value) $update[] = '(' . sqlesc($c_name) . ',' . sqlesc(is_array($_POST[$c_name]) ? join('|', $_POST[$c_name]) : $_POST[$c_name]) . ')';
     if (sql_query('INSERT INTO api_keys(name,value) VALUES ' . join(',', $update) . ' ON DUPLICATE KEY update value=values(value)')) {
         $t = '$INSTALLER09';
@@ -63,8 +63,8 @@ $HTMLOUT.= "<h3>{$lang['apikeys_sitehead']}</h3>
 <table class='table table-bordered'>";
 if ($CURUSER['id'] === 1)
     $HTMLOUT.= "
-<tr><td width='50%'>OMDB API Key</td><td><input type='text' class='form-control' name='omdb_key' size='10' value='" . htmlsafechars($api_keys['omdb_key']) . "' /></td><td>Active: <input class='table' type='radio' name='omdb_on' value='1' " . ($api_keys['omdb_on'] ? 'checked=\'checked\'' : '') . " />" . $lang['sitesettings_no'] . "<input class='table' type='radio' name='omdb_on' value='0' " . (!$api_keys['omdb_on'] ? 'checked=\'checked\'' : '') . " />Off</td></tr>
-<tr><td width='50%'>TMBD API Key</td><td><input type='text' class='form-control' name='tmdb_key' size='10' value='" . htmlsafechars($api_keys['tmdb_key']) . "' /></td><td>Active: <input class='table' type='radio' name='tmdb_on' value='1' " . ($api_keys['tmdb_on'] ? 'checked=\'checked\'' : '') . " />" . $lang['sitesettings_no'] . "<input class='table' type='radio' name='tmdb_on' value='0' " . (!$api_keys['tmdb_on'] ? 'checked=\'checked\'' : '') . " /></td></tr>
+<tr><td width='50%'>OMDB API Key</td><td><input type='text' class='form-control' name='omdb_key' size='10' value='" . htmlsafechars($api_keys['omdb_key']) . "' /></td><td>Active: <input class='table' type='radio' name='omdb_on' value='1' " . ($api_keys['omdb_on'] ? 'checked=\'checked\'' : '') . " /><span style='color:#008000;'> On</span><input class='table' type='radio' name='omdb_on' value='0' " . (!$api_keys['omdb_on'] ? 'checked=\'checked\'' : '') . " /><span style='color:#f50909;'> Off</span></td></tr>
+<tr><td width='50%'>TMBD API Key</td><td><input type='text' class='form-control' name='tmdb_key' size='10' value='" . htmlsafechars($api_keys['tmdb_key']) . "' /></td><td>Active: <input class='table' type='radio' name='tmdb_on' value='1' " . ($api_keys['tmdb_on'] ? 'checked=\'checked\'' : '') . " /><span style='color:#008000;'> On</span><input class='table' type='radio' name='tmdb_on' value='0' " . (!$api_keys['tmdb_on'] ? 'checked=\'checked\'' : '') . " /><span style='color:#f50909;'> Off</span></td></tr>
 <tr><td colspan='2' class='table' align='center'><input class='btn btn-default' type='submit' value='{$lang['apikeys_apply']}' /></td></tr>
 </table></form>";
 $HTMLOUT.= "</div></div>";
