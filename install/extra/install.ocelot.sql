@@ -2369,7 +2369,30 @@ INSERT INTO `staffpanel` (`id`, `page_name`, `file_name`, `description`, `type`,
 (76, 'Faq administration', 'staffpanel.php?tool=faq_admin', 'Configure site faq', 'settings', 4, 1, 1284303053),
 (114, 'api keys', 'staffpanel.php?tool=api_keys', 'api keys', 'settings', 6, 1, 1572681198);
 
+--
+-- Indexes for dumped tables
+--
 
+--
+-- Indexes for table `staffpanel`
+--
+ALTER TABLE `staffpanel`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `file_name` (`file_name`),
+  ADD KEY `av_class` (`av_class`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `staffpanel`
+--
+ALTER TABLE `staffpanel`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 -- --------------------------------------------------------
 
 --
