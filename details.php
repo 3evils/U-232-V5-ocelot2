@@ -894,7 +894,7 @@ if (in_array($torrents['category'], $INSTALLER09['tv_cats'])) {
     if ($tvmaze_info) $HTMLOUT.= tr($lang['details_tvrage'], $tvmaze_info, 1);
 }
 //== end tvmaze
-/*if ((in_array($torrents['category'], $INSTALLER09['movie_cats'])) && $torrents['url'] != '') {
+if ((in_array($torrents['category'], $INSTALLER09['movie_cats'])) && $torrents['url'] != '') {
 $imdb = '';
 $imdb_info['id'] = $imdb_info['title'] = $imdb_info['orig_title'] = $imdb_info['year'] = $imdb_info['rating'] = $imdb_info['votes'] = $imdb_info['gen'] = $imdb_info['runtime'] = $imdb_info['country'] = $imdb_info['lanuage'] = $imdb_info['director'] = $imdb_info['produce'] = $imdb_info['write'] = $imdb_info['compose'] = $imdb_info['plotoutline'] = $imdb_info['plot'] = $imdb_info['trailers'] = $imdb_info['comment'] = "";
 
@@ -941,97 +941,6 @@ $imdb.= "".strip_tags($imdb_info['comment'])."";
 $imdb.="</div></div></div></div></div><!-- closing comments -->";
 $imdb .="</div><!-- closing imdb -->";
 $HTMLOUT.= tr($lang['details_add_imdb'], $imdb, 1);
-}*/
-
-
-////////////OMDB & TMDB by Antimidas and Tundracanine 2018-2019
-if (in_array($torrents['category'], $INSTALLER09['movie_cats']) && $INSTALLER09['omdb_on']==1) {
-
-    $imdb_id_new = 0;
-    if (preg_match('(.com/title/tt\d+)', $torrents_txt['descr'], $im_match_imdb) && $torrents['url'] == '') {
-        $imdb_id_new = str_replace(".com/title/tt", "", $im_match_imdb[0]);
-        $torrents['url'] = 'https://www.imdb.com/title/tt' . $imdb_id_new;
-    }
-    elseif (preg_match('(.com/title/tt\d+)', $torrents['url'], $im_match_imdb) && $torrents['url'] != '') {
-        $imdb_id_new = str_replace(".com/title/tt", "", $im_match_imdb[0]);
-    }
-    if ($torrents['url'] != '') {
-
-        $imdb_id = $imdb_id_new;
-
-        $url = file_get_contents("https://www.omdbapi.com/?i=tt" . $imdb_id . "&plot=full&tomatoes=True&r=json&apikey=" . $INSTALLER09['omdb_key']."");
-        $omdb = json_decode($url, true);
-        foreach ($omdb['Ratings'] as $rat => $rate);
-
-
-
-        $poster = $omdb['Poster'];
-        if ($poster != "N/A") {
-            $omdb['Poster'] = "/imdb/images/" . $imdb_id . ".jpg";
-            if (!file_exists('./imdb/images/' . $imdb_id . '.jpg')) {
-                @copy("$poster", "./imdb/images/" . $imdb_id . ".jpg");
-            }
-        } else {
-            if ($poster == "N/A") {
-                $omdb['Poster'] = "./pic/nopostermov.jpg";
-            }
-        }
-
-///////////TMDB Trailer scrape//////////////
-        if ($INSTALLER09['tmdb_on'] == 1 ) {
-            $json = file_get_contents("https://api.themoviedb.org/3/movie/tt" . $imdb_id . "/videos?api_key=". $INSTALLER09['tmdb_key']."");
-            $tmdb = json_decode($json, true);
-            foreach ($tmdb['results'] as $key => $test) {
-                $yt = $test['key'];
-                $trailer = 'https://www.youtube.com/embed/' . $yt . '';
-            }
-        }
-
-
-        if ($omdb['Title'] != '') {
-            $HTMLOUT .= "<div style='width: 100%; display: table;''><tr><th class=' col-md-1 text-center'>
-	</th><div style='display: inline;width:70%;float:right;'><th class=' col-md-5 text-left'>
-        <strong><font color='#79c5c5'>Title:</font></strong><font style='font-size:24px;' color='white'> " . $omdb['Title'] . "</font><br/>
-        <strong><font color='#79c5c5'>Released:</font></strong><font color='grey'> " . $omdb['Released'] . "</font><br/>
-        <strong><font color='#79c5c5'>Genre:</font></strong><font color='grey'> " . $omdb['Genre'] . "</font><br/>
-	<strong><font color='#79c5c5'>Rated:</font></strong><font color='grey'> " . $omdb['Rated'] . "</font><br/>
-	<strong><font color='#79c5c5'>Director:</font></strong><font color='grey'> " . $omdb['Director'] . "</font><br/>
-	<strong><font color='#79c5c5'>Cast:</font></strong><font color='grey'> " . $omdb['Actors'] . "</font><br/>
-	<strong><font color='#79c5c5'>Studio:</font></strong><font color='grey'> " . $omdb['Production'] . "</font><br/>
-	<strong><font color='#79c5c5'>Description:</font></strong><font color='grey'> " . $omdb['Plot'] . "</font><br/>
-    <strong><font color='#79c5c5'>Runtime:</font></strong><font color='grey'> " . $omdb['Runtime'] . "</font><br/>
-    <strong><font color='#79c5c5'>IMDB Rating:</font></strong><span color='white'> " . $omdb['imdbRating'] . "</span><span style='color:grey;'>&nbspfrom&nbsp&nbsp</span><span color='white'>".$omdb['imdbVotes']."</span><span style='color:grey;'>&nbspVotes</span><br/><br/>
-    </div></div>";
-
-            if (empty($torrents["poster"]) or ($torrents["poster"] == "./pic/nopostermov.jpg") && $omdb['Poster'] != "./pic/nopostermov.jpg") {
-                sql_query("UPDATE torrents SET poster = " . sqlesc($omdb['Poster']) . " WHERE id = $id LIMIT 1") or sqlerr(__file__, __line__);
-                $torrents["poster"] = $omdb['Poster'];
-                $torrent_cache['poster'] = $omdb['Poster'];
-                if ($torrent_cache) {
-                    $mc1->update_row(false, $torrent_cache);
-                    $mc1->commit_transaction($INSTALLER09['expires']['torrent_details']);
-                    $mc1->delete_value('top5_tor_');
-                    $mc1->delete_value('last5_tor_');
-                    $mc1->delete_value('scroll_tor_');
-                }
-            }
-
-        }
-    }
-
-
-}
-
-
-if (empty($torrents['poster']) or ($torrents['poster'] == './pic/noposter.jpg') && $image != './pic/noposter.jpg') {
-}
-if (!empty($trailer)) {
-    $HTMLOUT .= "<div class='row' style='background-color:rgba(0,0,0,0);;'>
-            <div class='col-md-12'><h3 class='text-center'><strong><font color='#79c5c5'>Trailer </font></strong><span style='font-size:12px;'>(Some videos may be unavailable in your region)</span></h3><br>";
-    $HTMLOUT .= "<div><iframe style='margin-left:13%;text-align:center;justify-content:center;' id=\"ytplayer\" type=\"text/html\" width=\"75%\" height=\"450px\" src=\"$trailer\" frameborder=\"0\"></iframe></div></td></tr>";
-
-} else {
-    $HTMLOUT.= "<tr><td>No youtube data found</td></tr>";
 }
 //if (empty($tvrage_info) && empty($imdb) && in_array($torrents['category'], array_merge($INSTALLER09['movie_cats'], $INSTALLER09['tv_cats']))) $HTMLOUT.= "<tr><td colspan='2'>No Imdb or Tvrage info.</td></tr>";
 if (empty($tvmaze_info) && empty($imdb) && in_array($torrents['category'], array_merge($INSTALLER09['movie_cats'], $INSTALLER09['tv_cats']))) $HTMLOUT.= "<tr><td colspan='2'>{$lang['details_add_noimdb']}</td></tr>";

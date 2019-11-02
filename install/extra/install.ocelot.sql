@@ -2366,7 +2366,9 @@ INSERT INTO `staffpanel` (`id`, `page_name`, `file_name`, `description`, `type`,
 (73, 'Overforum Manager', 'staffpanel.php?tool=moforums', 'Over Forum admin and management', 'settings', 6, 1, 1277916240),
 (74, 'Sub Forum Config', 'staffpanel.php?tool=msubforums', 'Configure sub forums', 'settings', 6, 1, 1284303053),
 (75, 'Rules administration', 'staffpanel.php?tool=rules_admin', 'Configure site rules', 'settings', 4, 1, 1284303053),
-(76, 'Faq administration', 'staffpanel.php?tool=faq_admin', 'Configure site faq', 'settings', 4, 1, 1284303053);
+(76, 'Faq administration', 'staffpanel.php?tool=faq_admin', 'Configure site faq', 'settings', 4, 1, 1284303053),
+(114, ''api keys'', ''staffpanel.php?tool=api_keys'', ''api keys'', ''settings'', 6, 1, 1572681198);
+
 
 -- --------------------------------------------------------
 
@@ -2658,6 +2660,38 @@ CREATE TABLE IF NOT EXISTS `userhits` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
+--
+-- Table structure for table `api_keys`
+--
+
+CREATE TABLE `api_keys` (
+  `name` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `value` varchar(255) CHARACTER SET utf8 DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `api_keys`
+--
+
+INSERT INTO `api_keys` (`name`, `value`) VALUES
+(''omdb_key'', ''''),
+(''tmdb_key'', ''''),
+(''omdb_on'', ''0''),
+(''tmdb_on'', ''0'');
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `api_keys`
+--
+ALTER TABLE `api_keys`
+  ADD UNIQUE KEY `name` (`name`);
+ALTER TABLE `api_keys` ADD FULLTEXT KEY `name_2` (`name`);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
 --
 -- Table structure for table `users`
@@ -2666,7 +2700,7 @@ CREATE TABLE IF NOT EXISTS `userhits` (
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(10) UNSIGNED NOT NULL,
   `username` varchar(40) CHARACTER SET utf8 DEFAULT NULL,
-  `passhash` varchar(32) CHARACTER SET utf8 DEFAULT NULL,
+  `passhash` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
   `secret` varchar(20) CHARACTER SET utf8 DEFAULT NULL,
   `passkey` varchar(32) CHARACTER SET utf8 DEFAULT NULL,
   `email` varchar(180) CHARACTER SET utf8 DEFAULT NULL,
