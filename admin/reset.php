@@ -1,20 +1,20 @@
 <?php
 /**
- |--------------------------------------------------------------------------|
- |   https://github.com/Bigjoos/                                            |
- |--------------------------------------------------------------------------|
- |   Licence Info: WTFPL                                                    |
- |--------------------------------------------------------------------------|
- |   Copyright (C) 2010 U-232 V5                                            |
- |--------------------------------------------------------------------------|
- |   A bittorrent tracker source based on TBDev.net/tbsource/bytemonsoon.   |
- |--------------------------------------------------------------------------|
- |   Project Leaders: Mindless, Autotron, whocares, Swizzles.               |
- |--------------------------------------------------------------------------|
-  _   _   _   _   _     _   _   _   _   _   _     _   _   _   _
- / \ / \ / \ / \ / \   / \ / \ / \ / \ / \ / \   / \ / \ / \ / \
+|--------------------------------------------------------------------------|
+|   https://github.com/Bigjoos/                                            |
+|--------------------------------------------------------------------------|
+|   Licence Info: WTFPL                                                    |
+|--------------------------------------------------------------------------|
+|   Copyright (C) 2010 U-232 V5                                            |
+|--------------------------------------------------------------------------|
+|   A bittorrent tracker source based on TBDev.net/tbsource/bytemonsoon.   |
+|--------------------------------------------------------------------------|
+|   Project Leaders: Mindless, Autotron, whocares, Swizzles.               |
+|--------------------------------------------------------------------------|
+_   _   _   _   _     _   _   _   _   _   _     _   _   _   _
+/ \ / \ / \ / \ / \   / \ / \ / \ / \ / \ / \   / \ / \ / \ / \
 ( U | - | 2 | 3 | 2 )-( S | o | u | r | c | e )-( C | o | d | e )
- \_/ \_/ \_/ \_/ \_/   \_/ \_/ \_/ \_/ \_/ \_/   \_/ \_/ \_/ \_/
+\_/ \_/ \_/ \_/ \_/   \_/ \_/ \_/ \_/ \_/ \_/   \_/ \_/ \_/ \_/
  */
 if (!defined('IN_INSTALLER09_ADMIN')) {
     $HTMLOUT = '';
@@ -34,7 +34,7 @@ require_once (INCL_DIR . 'user_functions.php');
 require_once (INCL_DIR . 'password_functions.php');
 require_once (CLASS_DIR . 'class_check.php');
 $class = get_access(basename($_SERVER['REQUEST_URI']));
-class_check($class);
+//class_check($class);
 $lang = array_merge($lang, load_language('ad_reset'));
 //== Reset Lost Password
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -43,13 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $secret = mksecret();
     $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     $newpassword = "";
-    for ($i = 0; $i < 10; $i++) $newpassword.= $chars[mt_rand(0, strlen($chars) - 1) ];
-    $passhash = make_passhash($secret, md5($newpassword));
+    $newpassword = make_password();
+    $passhash = password_hash($newpassword, PASSWORD_BCRYPT);
     $postkey = PostKey(array(
         $uid,
         $CURUSER['id']
     ));
-    $res = sql_query('UPDATE users SET secret=' . sqlesc($secret) . ', passhash=' . sqlesc($passhash) . ' WHERE username=' . sqlesc($username) . ' AND id=' . sqlesc($uid) . ' AND class<' . $CURUSER['class']) or sqlerr(__file__, __line__);
+    //  . ' AND class<' . $CURUSER['class']
+    $res = sql_query('UPDATE users SET secret=' . sqlesc($secret) . ', passhash=' . sqlesc($passhash) . ' WHERE username=' . sqlesc($username) . ' AND id=' . sqlesc($uid)) or sqlerr(__file__, __line__);
     $mc1->begin_transaction('MyUser_' . $uid);
     $mc1->update_row(false, array(
         'secret' => $secret,
@@ -64,9 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $mc1->commit_transaction($INSTALLER09['expires']['user_cache']);
     if (mysqli_affected_rows($GLOBALS["___mysqli_ston"]) != 1) stderr($lang['reset_stderr'], $lang['reset_stderr1']);
     if (CheckPostKey(array(
-        $uid,
-        $CURUSER['id']
-    ) , $postkey) == false) stderr($lang['reset_stderr2'], $lang['reset_stderr3']);
+            $uid,
+            $CURUSER['id']
+        ) , $postkey) == false) stderr($lang['reset_stderr2'], $lang['reset_stderr3']);
     write_log($lang['reset_pwreset'], $lang['reset_pw_log1'] . htmlsafechars($username) . $lang['reset_pw_log2'] . htmlsafechars($CURUSER['username']));
     stderr($lang['reset_pw_success'], '' . $lang['reset_pw_success1'] . ' <b>' . htmlsafechars($username) . '</b>' . $lang['reset_pw_success2'] . '<b>' . htmlsafechars($newpassword) . '</b>.');
 }
