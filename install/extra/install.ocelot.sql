@@ -2369,30 +2369,40 @@ INSERT INTO `staffpanel` (`id`, `page_name`, `file_name`, `description`, `type`,
 (76, 'Faq administration', 'staffpanel.php?tool=faq_admin', 'Configure site faq', 'settings', 4, 1, 1284303053),
 (114, 'api keys', 'staffpanel.php?tool=api_keys', 'api keys', 'settings', 6, 1, 1572681198);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `api_keys`
+--
+
+CREATE TABLE `api_keys` (
+  `name` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `value` varchar(255) CHARACTER SET utf8 DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `api_keys`
+--
+
+INSERT INTO `api_keys` (`name`, `value`) VALUES
+(''omdb_key'', ''''),
+(''tmdb_key'', '''');
+
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `staffpanel`
+-- Indexes for table `api_keys`
 --
-ALTER TABLE `staffpanel`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `file_name` (`file_name`),
-  ADD KEY `av_class` (`av_class`);
+ALTER TABLE `api_keys`
+  ADD UNIQUE KEY `name` (`name`);
+ALTER TABLE `api_keys` ADD FULLTEXT KEY `name_2` (`name`);
 
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `staffpanel`
---
-ALTER TABLE `staffpanel`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
 -- --------------------------------------------------------
 
 --
@@ -2715,8 +2725,6 @@ ALTER TABLE `api_keys` ADD FULLTEXT KEY `name_2` (`name`);
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `users`
