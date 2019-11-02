@@ -8,7 +8,7 @@
 
 ```
 
-##UPDATED 01-Nov-2019
+## UPDATED 01-Nov-2019
 
 Password hashing switched over to bcrypt.
 OMDB/TMDB/YouTube mod has been incorperated. Page added to staff panel for adding API Keys easily.
