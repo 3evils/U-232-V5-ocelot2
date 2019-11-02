@@ -1,20 +1,20 @@
 <?php
 /**
- |--------------------------------------------------------------------------|
- |   https://github.com/Bigjoos/                                            |
- |--------------------------------------------------------------------------|
- |   Licence Info: WTFPL                                                    |
- |--------------------------------------------------------------------------|
- |   Copyright (C) 2010 U-232 V5                                            |
- |--------------------------------------------------------------------------|
- |   A bittorrent tracker source based on TBDev.net/tbsource/bytemonsoon.   |
- |--------------------------------------------------------------------------|
- |   Project Leaders: Mindless, Autotron, whocares, Swizzles.               |
- |--------------------------------------------------------------------------|
-  _   _   _   _   _     _   _   _   _   _   _     _   _   _   _
- / \ / \ / \ / \ / \   / \ / \ / \ / \ / \ / \   / \ / \ / \ / \
+|--------------------------------------------------------------------------|
+|   https://github.com/Bigjoos/                                            |
+|--------------------------------------------------------------------------|
+|   Licence Info: WTFPL                                                    |
+|--------------------------------------------------------------------------|
+|   Copyright (C) 2010 U-232 V5                                            |
+|--------------------------------------------------------------------------|
+|   A bittorrent tracker source based on TBDev.net/tbsource/bytemonsoon.   |
+|--------------------------------------------------------------------------|
+|   Project Leaders: Mindless, Autotron, whocares, Swizzles.               |
+|--------------------------------------------------------------------------|
+_   _   _   _   _     _   _   _   _   _   _     _   _   _   _
+/ \ / \ / \ / \ / \   / \ / \ / \ / \ / \ / \   / \ / \ / \ / \
 ( U | - | 2 | 3 | 2 )-( S | o | u | r | c | e )-( C | o | d | e )
- \_/ \_/ \_/ \_/ \_/   \_/ \_/ \_/ \_/ \_/ \_/   \_/ \_/ \_/ \_/
+\_/ \_/ \_/ \_/ \_/   \_/ \_/ \_/ \_/ \_/ \_/   \_/ \_/ \_/ \_/
  */
 if (!defined('IN_INSTALLER09_ADMIN')) {
     $HTMLOUT = '';
@@ -41,6 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'username' => '',
         'email' => '',
         'secret' => '',
+        'passhint' => '1',
+        'pincode' => '2345',
         'passhash' => '',
         'status' => 'confirmed',
         'added' => TIME_NOW,
@@ -50,11 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     else stderr($lang['std_err'], $lang['err_username']);
     if (isset($_POST['password']) && isset($_POST['password2']) && strlen($_POST['password']) > 6 && $_POST['password'] == $_POST['password2']) {
         $insert['secret'] = mksecret();
-        $insert['passhash'] = make_passhash($insert['secret'], md5($_POST['password']));
+        $insert['passhash'] = password_hash($_POST['password'], PASSWORD_BCRYPT);
     } else stderr($lang['std_err'], $lang['err_password']);
     if (isset($_POST['email']) && validemail($_POST['email'])) $insert['email'] = htmlsafechars($_POST['email']);
     else stderr($lang['std_err'], $lang['err_email']);
-    if (sql_query(sprintf('INSERT INTO users (username, email, secret, passhash, status, added, last_access) VALUES (%s)', join(', ', array_map('sqlesc', $insert))))) {
+    if (sql_query(sprintf('INSERT INTO users (username, email, secret, passhint, pin_code, passhash, status, added, last_access) VALUES (%s)', join(', ', array_map('sqlesc', $insert))))) {
         $user_id = ((is_null($___mysqli_res = mysqli_insert_id($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
         stderr($lang['std_success'], sprintf($lang['text_user_added'], $user_id));
     } else {
