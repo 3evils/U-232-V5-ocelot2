@@ -33,10 +33,22 @@ function make_passhash_login_key($len = 60)
     $pass = mksecret($len);
     return md5($pass);
 }
+/*
+function make_passhash_login_key($pass) {
+    $options = ['cost' => 12,];
+    return password_hash($pass, PASSWORD_BCRYPT, $options);
+  }
+*/
 function make_passhash($salt, $md5_once_password)
 {
     return md5(md5($salt) . $md5_once_password);
 }
+/*
+function make_passhash($pass) {
+    $options = ['cost' => 12,];
+    return password_hash($pass, PASSWORD_BCRYPT, $options);
+  }
+*/
 function make_password()
 {
     $pass = "";
