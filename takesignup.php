@@ -100,10 +100,11 @@ $editsecret = (!$arr[0] ? "" : EMAIL_CONFIRM ? make_passhash_login_key() : "");
 $wanthintanswer = md5($hintanswer);
 $user_frees = (OCELOT_TRACKER == true ? 0 : TIME_NOW + 14 * 86400);
 check_banned_emails($email);
+$pm = 'no';
 $psecret = $editsecret;
 //$emails = encrypt_email($email);
 
-$ret = sql_query("INSERT INTO users (username, passhash, secret, editsecret, birthday, country, gender, pin_code, stylesheet, passhint, hintanswer, email, status, " . (!$arr[0] ? "class, " : "") . "added, last_access, time_offset, dst_in_use, free_switch) VALUES (" . implode(",", array_map("sqlesc", array(
+$ret = sql_query("INSERT INTO users (username, passhash, secret, editsecret, birthday, country, gender, pin_code, stylesheet, passhint, hintanswer, pm_forced, email, status, " . (!$arr[0] ? "class, " : "") . "added, last_access, time_offset, dst_in_use, free_switch) VALUES (" . implode(",", array_map("sqlesc", array(
     $wantusername,
     $wantpasshash,
     $secret,
@@ -115,6 +116,7 @@ $ret = sql_query("INSERT INTO users (username, passhash, secret, editsecret, bir
     $INSTALLER09['stylesheet'],
     $passhint,
     $wanthintanswer,
+    $pm,
     $email,
     (!$arr[0] || !EMAIL_CONFIRM ? 'confirmed' : 'pending')
 ))) . ", " . (!$arr[0] ? UC_SYSOP . ", " : "") . "" . TIME_NOW . "," . TIME_NOW . " , $time_offset, {$dst_in_use['tm_isdst']}, $user_frees)") or sqlerr(__FILE__, __LINE__);
